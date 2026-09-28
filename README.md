@@ -1,4 +1,4 @@
-﻿# Jev SDK
+# Jev SDK
 
 A C# client for the [TypeSafe System One API](https://docs.typesafe.ai). You send some text (the *state*) and one or more questions, and the API answers each question with probabilities.
 
@@ -6,20 +6,18 @@ A C# client for the [TypeSafe System One API](https://docs.typesafe.ai). You sen
 
 ## Requirements
 
-- .NET 8 SDK or newer (the library targets `net8.0` and `net10.0`)
-- A TypeSafe API key
+- .NET 8 or newer (the library targets `net8.0` and `net10.0`)
+- A TypeSafe API key — or an OpenRouter API key (see [OpenRouter](#openrouter))
 
 ## Installation
 
-The SDK is not on NuGet yet. Add a project reference to it:
-
 ```powershell
-dotnet add <your-project> reference path/to/Csharp-Jev-SDK/src/Jev.Sdk
+dotnet add package Jev.Sdk
 ```
 
 ## Set your API key
 
-The SDK reads the key from the `JEV_API_KEY` setting. Use either of these:
+The SDK reads the key from the `JEV_API_KEY` environment variable. Use either of these:
 
 **A `.env` file** in your app's folder (or any parent folder):
 
@@ -133,14 +131,60 @@ The default model is `jev-latest`. To change it for every request you build with
 JevClientOptions.SetModel("jev-1.13.0");
 ```
 
-You can also set it for a single request with `request.SetModel("...")`. The client does not add a model for you, so always call `SetModel` on the request.
+You can also set it per request with `request.SetModel("...")`.
+
+## OpenRouter
+
+The SDK can route requests through [OpenRouter](https://openrouter.ai) instead of calling TypeSafe directly. OpenRouter implements the same API spec, so no other code changes are needed.
+
+**1. Set your OpenRouter API key** in `.env` or the environment:
+
+```
+OPENROUTER_API_KEY=your-openrouter-key-here
+```
+
+**2. Call `UseOpenRouter()` once at startup**, before creating any client:
+
+```csharp
+JevClientOptions.UseOpenRouter();
+
+using var client = new JevClient();
+// use exactly as normal
+```
+
+To use a specific model:
+
+```csharp
+JevClientOptions.UseOpenRouter("~typesafe/jev-1.13.0");
+```
+
+Or configure each option individually:
+
+```csharp
+JevClientOptions.SetBaseUrl("https://openrouter.ai/api");
+JevClientOptions.SetApiKeyVariable("OPENROUTER_API_KEY");
+JevClientOptions.SetModel("~typesafe/jev-latest");
+```
+
+## `JevClientOptions` reference
+
+| Method | Description |
+|---|---|
+| `SetModel(string)` | Set the default model for all requests |
+| `GetModel()` | Get the current default model |
+| `SetBaseUrl(string)` | Set the API base URL |
+| `GetBaseUrl()` | Get the current base URL |
+| `SetApiKeyVariable(string)` | Change the environment variable name used to load the API key |
+| `SetApiKey(string)` | Set the API key directly in code |
+| `GetAPIKey()` | Get the current API key (loads from env on first call) |
+| `UseOpenRouter(string?)` | Switch to OpenRouter — sets base URL, key variable, and model in one call |
 
 ## Errors
 
 | Exception | When |
 |---|---|
 | `JevApiException` | The API returned an error. `StatusCode` and `ResponseBody` tell you what happened, for example `401` for a wrong key. |
-| `InvalidOperationException` | `JEV_API_KEY` is not set. Thrown by `new JevClient()`. |
+| `InvalidOperationException` | The API key environment variable is not set. Thrown by `new JevClient()`. |
 | `JsonException` | The API replied with an empty or unreadable body. |
 
 ## Project layout
@@ -148,7 +192,7 @@ You can also set it for a single request with `request.SetModel("...")`. The cli
 ```
 src/Jev.Sdk/
   JevClient.cs, IJevClient.cs   The client and its interface
-  JevClientOptions.cs           API key and default model
+  JevClientOptions.cs           API key, base URL, and default model
   Models/                       Request, Question, Response, Answer types, Usage
   Exceptions/                   JevApiException
 ```
@@ -166,4 +210,3 @@ Warnings are treated as errors in this repository (see `Directory.Build.props`).
 - Tests
 - A dependency injection helper (`AddJevClient`)
 - Cancellation tokens
-- A NuGet package

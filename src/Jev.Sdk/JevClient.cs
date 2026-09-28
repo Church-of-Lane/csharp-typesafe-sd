@@ -18,7 +18,7 @@ public sealed class JevClient : IJevClient, IDisposable
     public JevClient()
     {
         _httpClient = new HttpClient();
-
+        _httpClient.BaseAddress = new Uri(JevClientOptions.GetBaseUrl());
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JevClientOptions.GetAPIKey());
     }
     public void Dispose()
@@ -101,7 +101,7 @@ public sealed class JevClient : IJevClient, IDisposable
 
         using HttpResponseMessage httpResponse =
         await _httpClient.PostAsync(
-            "https://api.typesafe.ai/v1/systemone",
+            "/v1/systemone",
             content
         );
 

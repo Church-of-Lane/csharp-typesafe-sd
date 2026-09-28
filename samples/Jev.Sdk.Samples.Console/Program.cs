@@ -1,6 +1,6 @@
-﻿using Jef.Sdk;
-using Jef.Sdk.Exceptions;
-using Jef.Sdk.Models;
+﻿using Jev.Sdk;
+using Jev.Sdk.Exceptions;
+using Jev.Sdk.Models;
 
 // 1. Build the question.
 var question = new Question();
@@ -16,13 +16,13 @@ question.SetCriteria(new
 //    the answer comes back under the same key.
 var request = new Request();
 request.SetState("I was charged twice for this order. Please refund the extra charge.");
-request.SetModel(JefClientOptions.GetModel());
+request.SetModel(JevClientOptions.GetModel());
 request.SetQuestions(new Dictionary<string, Question> { ["requests_refund"] = question });
 
 // 3. Call the API and print the answer.
 try
 {
-    using var client = new JefClient();
+    using var client = new JevClient();
     Response response = await client.EvaluateAsync(request);
 
     if (response.GetAnswers()?["requests_refund"] is NoulAnswer answer)
@@ -33,7 +33,7 @@ try
     Console.WriteLine($"Model: {response.GetModel()}");
     Console.WriteLine($"Tokens: {response.GetUsage()?.GetInputTokens()} in, {response.GetUsage()?.GetOutputTokens()} out");
 }
-catch (JefApiException ex)
+catch (JevApiException ex)
 {
     Console.WriteLine($"API error {(int)ex.StatusCode}: {ex.ResponseBody}");
 }

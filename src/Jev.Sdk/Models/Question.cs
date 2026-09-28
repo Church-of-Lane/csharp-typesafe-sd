@@ -1,6 +1,6 @@
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace Jef.Sdk.Models;
+namespace Jev.Sdk.Models;
 public sealed record Question
 {
     public enum QuestionType

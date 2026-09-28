@@ -1,13 +1,13 @@
-using System.Net.Http.Headers;
-using Jef.Sdk.Models;
+﻿using System.Net.Http.Headers;
+using Jev.Sdk.Models;
 using System.Text.Json;
 using System.Text;
-using Jef.Sdk.Exceptions;
+using Jev.Sdk.Exceptions;
 using System.Text.Json.Serialization;
 
-namespace Jef.Sdk;
+namespace Jev.Sdk;
 
-public sealed class JefClient : IJefClient, IDisposable
+public sealed class JevClient : IJevClient, IDisposable
 {
     private readonly HttpClient _httpClient;
     private static readonly JsonSerializerOptions RequestOptions = new()
@@ -15,11 +15,11 @@ public sealed class JefClient : IJefClient, IDisposable
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
     };
 
-    public JefClient()
+    public JevClient()
     {
         _httpClient = new HttpClient();
 
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JefClientOptions.GetAPIKey());
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JevClientOptions.GetAPIKey());
     }
     public void Dispose()
     {
@@ -38,7 +38,7 @@ public sealed class JefClient : IJefClient, IDisposable
         Request request = new Request();
         request.SetState(state);
         request.SetQuestions(questions);
-        request.SetModel(JefClientOptions.GetModel());
+        request.SetModel(JevClientOptions.GetModel());
         return request;
     }
     static Request CreateRequest(object state, Dictionary<string, Question> questions, string model_)
@@ -109,12 +109,12 @@ public sealed class JefClient : IJefClient, IDisposable
         string jsonResponse = await httpResponse.Content.ReadAsStringAsync();
         if (!httpResponse.IsSuccessStatusCode)
         {
-            throw new JefApiException(
+            throw new JevApiException(
                 httpResponse.StatusCode,
                 jsonResponse
             );
         }
-        Response response = JsonSerializer.Deserialize<Response>(jsonResponse) ?? throw new JsonException("Jef API returned an invalid or empty response.");
+        Response response = JsonSerializer.Deserialize<Response>(jsonResponse) ?? throw new JsonException("Jev API returned an invalid or empty response.");
         
 
         return response;

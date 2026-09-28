@@ -5,11 +5,11 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jef.Sdk", "src\Jef.Sdk\Jef.Sdk.csproj", "{80F47157-8C7E-4594-A937-88CC53F98992}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jev.Sdk", "src\Jev.Sdk\Jev.Sdk.csproj", "{80F47157-8C7E-4594-A937-88CC53F98992}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{5D20AA90-6969-D8BD-9DCD-8634F4692FDA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jef.Sdk.Samples.Console", "samples\Jef.Sdk.Samples.Console\Jef.Sdk.Samples.Console.csproj", "{A478CDBB-D758-455D-B437-ED5FDC012575}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jev.Sdk.Samples.Console", "samples\Jev.Sdk.Samples.Console\Jev.Sdk.Samples.Console.csproj", "{A478CDBB-D758-455D-B437-ED5FDC012575}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

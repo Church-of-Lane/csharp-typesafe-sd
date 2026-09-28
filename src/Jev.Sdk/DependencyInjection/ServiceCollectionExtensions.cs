@@ -1,4 +1,4 @@
-namespace Jef.Sdk.DependencyInjection;
+﻿namespace Jev.Sdk.DependencyInjection;
 
 public static class ServiceCollectionExtensions
 {

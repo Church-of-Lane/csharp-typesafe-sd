@@ -1,12 +1,12 @@
-using DotNetEnv;
+﻿using DotNetEnv;
 
-namespace Jef.Sdk;
+namespace Jev.Sdk;
 
 
 //Stores API and model that will be used by default
-public static class JefClientOptions
+public static class JevClientOptions
 {
-    private const string ApiKeyVariable = "JEF_API_KEY";
+    private const string ApiKeyVariable = "JEV_API_KEY";
 
     private static string? s_apiKey;
     private static string s_model = "jev-latest";

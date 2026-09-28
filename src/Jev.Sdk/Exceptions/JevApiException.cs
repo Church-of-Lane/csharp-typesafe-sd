@@ -1,16 +1,16 @@
-using System.Net;
+﻿using System.Net;
 
 
-namespace Jef.Sdk.Exceptions;
-public sealed class JefApiException : Exception
+namespace Jev.Sdk.Exceptions;
+public sealed class JevApiException : Exception
 {
     public HttpStatusCode StatusCode { get; }
     public string ResponseBody { get; }
 
-    public JefApiException(
+    public JevApiException(
         HttpStatusCode statusCode,
         string responseBody)
-        : base($"Jef API request failed with status code {(int)statusCode} ({statusCode}).")
+        : base($"Jev API request failed with status code {(int)statusCode} ({statusCode}).")
     {
         StatusCode = statusCode;
         ResponseBody = responseBody;

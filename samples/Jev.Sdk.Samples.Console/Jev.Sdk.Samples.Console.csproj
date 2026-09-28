@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Jef.Sdk\Jef.Sdk.csproj" />
+    <ProjectReference Include="..\..\src\Jev.Sdk\Jev.Sdk.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

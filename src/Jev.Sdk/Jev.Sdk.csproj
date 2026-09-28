@@ -8,6 +8,7 @@
     <Authors>EnderNasha</Authors>
     <Description>C# client for the TypeSafe System One API.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/Church-of-Lane/csharp-typesafe-sd.git</RepositoryUrl>
   </PropertyGroup>
 
@@ -15,6 +16,7 @@
     <PackageReference Include="DotNetEnv" Version="3.2.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.12" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.12" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>

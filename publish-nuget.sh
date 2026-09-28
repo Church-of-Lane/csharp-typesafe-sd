@@ -74,7 +74,9 @@ if [ "$DRY_RUN" = 1 ]; then
 fi
 
 echo "Pushing to $SOURCE_URL"
-dotnet nuget push "$OUT/*.nupkg" --api-key "$NUGET_API_KEY" --source "$SOURCE_URL" --skip-duplicate
+PKG="$(ls "$OUT"/*.nupkg | head -n 1)"
+[ -n "$PKG" ] || die "no .nupkg found in $OUT"
+dotnet nuget push "$PKG" --api-key "$NUGET_API_KEY" --source "$SOURCE_URL" --skip-duplicate
 
 echo "Published $VERSION. Commit Jev.Sdk.csproj and tag the release:"
 say "git commit -am 'Release $VERSION' && git tag v$VERSION"

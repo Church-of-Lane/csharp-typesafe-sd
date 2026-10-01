@@ -2,7 +2,8 @@
 # Sets the version in src/Jev.Sdk/Jev.Sdk.csproj, packs the project,
 # and pushes Jev.Sdk to NuGet.
 #
-# The API key is read from NUGET_API_KEY.
+# The API key is read from NUGET_API_KEY, or from the .env file next to
+# this script if the variable is not set.
 #
 # macOS and Linux, bash 3.2 or newer.
 
@@ -24,7 +25,7 @@ Usage: publish-nuget.sh VERSION [--dry-run] [--source URL]
   --source URL  NuGet feed to push to (default: nuget.org)
   -h, --help    This message
 
-Requires NUGET_API_KEY unless --dry-run is given.
+Requires NUGET_API_KEY (environment or .env) unless --dry-run is given.
 USAGE
 }
 
@@ -51,7 +52,15 @@ echo "$VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$' \
 
 command -v dotnet >/dev/null || die "dotnet is not on PATH"
 
-[ "$DRY_RUN" = 1 ] || [ -n "${NUGET_API_KEY:-}" ] || die "NUGET_API_KEY is not set"
+# Load NUGET_API_KEY from .env if it is not already set in the environment.
+ENV_FILE="$ROOT/.env"
+if [ -z "${NUGET_API_KEY:-}" ] && [ -f "$ENV_FILE" ]; then
+    NUGET_API_KEY="$(sed -n 's/^[[:space:]]*NUGET_API_KEY[[:space:]]*=[[:space:]]*//p' "$ENV_FILE" \
+        | tail -n 1 | tr -d '\r' | sed -e 's/[[:space:]]*$//' -e 's/^["'\'']//' -e 's/["'\'']$//')"
+    [ -z "$NUGET_API_KEY" ] || echo "Using NUGET_API_KEY from .env"
+fi
+
+[ "$DRY_RUN" = 1 ] || [ -n "${NUGET_API_KEY:-}" ] || die "NUGET_API_KEY is not set. Add it to .env or export it"
 
 CURRENT="$(sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p' "$CSPROJ" | head -n 1)"
 [ -n "$CURRENT" ] || die "no <Version> in $CSPROJ"

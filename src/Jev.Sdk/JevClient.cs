@@ -21,6 +21,10 @@ public sealed class JevClient : IJevClient, IDisposable
         _httpClient.BaseAddress = new Uri(JevClientOptions.GetBaseUrl());
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JevClientOptions.GetAPIKey());
     }
+    public JevClient(HttpClient client)
+    {
+        _httpClient = client;
+    }
     public void Dispose()
     {
         _httpClient.Dispose();

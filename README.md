@@ -133,6 +133,38 @@ JevClientOptions.SetModel("jev-1.13.0");
 
 You can also set it per request with `request.SetModel("...")`.
 
+## Changing the base URL
+
+By default the SDK calls `https://api.typesafe.ai`. To point it somewhere else (a proxy, a staging server, or another provider that implements the same API), call `SetBaseUrl` once at startup, before creating any client:
+
+```csharp
+JevClientOptions.SetBaseUrl("https://my-proxy.example.com");
+
+using var client = new JevClient();
+```
+
+The base URL is read when `new JevClient()` runs, so clients created before the call keep the old URL. Requests are sent to `/v1/systemone` on that host.
+
+## Using your own `HttpClient`
+
+If you want to control the `HttpClient` yourself (timeouts, proxies, custom handlers, logging), pass it to the constructor:
+
+```csharp
+var http = new HttpClient
+{
+    BaseAddress = new Uri(JevClientOptions.GetBaseUrl()),
+    Timeout = TimeSpan.FromSeconds(30),
+};
+http.DefaultRequestHeaders.Authorization =
+    new AuthenticationHeaderValue("Bearer", JevClientOptions.GetAPIKey());
+
+using var client = new JevClient(http);
+```
+
+This constructor uses the client exactly as you give it. Unlike `new JevClient()`, it does **not** set the base address or the API key, so you must set `BaseAddress` and the `Authorization` header yourself.
+
+`JevClient` disposes the `HttpClient` when it is disposed. Don't pass in a shared `HttpClient` that other code still needs.
+
 ## OpenRouter
 
 The SDK can route requests through [OpenRouter](https://openrouter.ai) instead of calling TypeSafe directly. OpenRouter implements the same API spec, so no other code changes are needed.
@@ -172,7 +204,7 @@ JevClientOptions.SetModel("~typesafe/jev-latest");
 |---|---|
 | `SetModel(string)` | Set the default model for all requests |
 | `GetModel()` | Get the current default model |
-| `SetBaseUrl(string)` | Set the API base URL |
+| `SetBaseUrl(string)` | Set the API base URL (default `https://api.typesafe.ai`) |
 | `GetBaseUrl()` | Get the current base URL |
 | `SetApiKeyVariable(string)` | Change the environment variable name used to load the API key |
 | `SetApiKey(string)` | Set the API key directly in code |
